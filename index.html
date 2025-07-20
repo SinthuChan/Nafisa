@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nafisa Troll Game</title>
+  <style>
+    canvas {
+      background: #111;
+      display: block;
+      margin: 0 auto;
+      border: 4px solid #fff;
+    }
+    body {
+      text-align: center;
+      background: #000;
+      color: white;
+      font-family: monospace;
+    }
+    h1 {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Nafisa's Troll Adventure</h1>
+  <canvas id="game" width="800" height="400"></canvas>
+  <p>Use ⬅️ ➡️ keys to move Nafisa</p>
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const nafisaImg = new Image();
+    nafisaImg.src = "assets/player/nafisa.png";
+
+    const trapImg = new Image();
+    trapImg.src = "assets/trap/troll.png";
+
+    let nafisaX = 50;
+    const nafisaY = 300;
+    const nafisaWidth = 50;
+    const nafisaHeight = 50;
+    let message = "";
+
+    const trap = { x: 400, y: 300, size: 50 };
+    const goal = { x: 700, y: 300, size: 50 };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") nafisaX += 10;
+      if (e.key === "ArrowLeft") nafisaX -= 10;
+      checkTrap();
+      checkGoal();
+    });
+
+    function checkTrap() {
+      if (nafisaX < trap.x + trap.size && nafisaX + nafisaWidth > trap.x) {
+        message = "😂 Nafisa: Troll activated!";
+      }
+    }
+
+    function checkGoal() {
+      if (nafisaX < goal.x + goal.size && nafisaX + nafisaWidth > goal.x) {
+        message = "🎉 You escaped Nafisa's troll!";
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(nafisaImg, nafisaX, nafisaY, nafisaWidth, nafisaHeight);
+      ctx.drawImage(trapImg, trap.x, trap.y, trap.size, trap.size);
+
+      ctx.fillStyle = "lime";
+      ctx.fillRect(goal.x, goal.y, goal.size, goal.size);
+
+      ctx.fillStyle = "yellow";
+      ctx.font = "20px monospace";
+      ctx.fillText(message, 20, 30);
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
